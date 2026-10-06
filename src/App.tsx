@@ -1,31 +1,51 @@
-import { APITester } from "./APITester";
+import { Provider } from "react-redux";
+import { store } from "./app/store";
+import { useDeadlines } from "./hooks/useDeadlines";
+import { AssignmentForm } from "./components/AssignmentForm";
+import { AssignmentList } from "./components/AssignmentList";
+import { FilterBar } from "./components/FilterBar";
+import { withLoading } from "./components/withLoading";
 import "./index.css";
 
-import logo from "./logo.svg";
-import reactLogo from "./react.svg";
+const AssignmentListWithLoading = withLoading(AssignmentList);
+
+function Tracker() {
+  const d = useDeadlines();
+
+  return (
+    <div className="min-h-screen bg-slate-50">
+      <div className="mx-auto max-w-3xl px-4 py-8">
+        <div className="space-y-4">
+          <AssignmentForm onAdd={d.add} />
+          <FilterBar
+            filter={d.filter}
+            onFilter={d.changeFilter}
+            search={d.search}
+            onSearch={d.setSearch}
+            sortKey={d.sortKey}
+            onSort={d.setSortKey}
+            counts={{ total: d.stats.total, pending: d.stats.pending, overdue: d.stats.overdue, done: d.stats.done }}
+          />
+          <AssignmentListWithLoading
+            loading={d.loading}
+            error={d.error}
+            onRetry={d.reload}
+            total={d.items.length}
+            items={d.items}
+            onToggle={d.toggle}
+            onRemove={d.remove}
+          />
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export function App() {
   return (
-    <div className="max-w-7xl mx-auto p-8 text-center relative z-10">
-      <div className="flex justify-center items-center gap-8 mb-8">
-        <img
-          src={logo}
-          alt="Bun Logo"
-          className="h-24 p-6 transition-all duration-300 hover:drop-shadow-[0_0_2em_#646cffaa] scale-120"
-        />
-        <img
-          src={reactLogo}
-          alt="React Logo"
-          className="h-24 p-6 transition-all duration-300 hover:drop-shadow-[0_0_2em_#61dafbaa] animate-[spin_20s_linear_infinite]"
-        />
-      </div>
-
-      <h1 className="text-5xl font-bold my-4 leading-tight">Bun + React</h1>
-      <p>
-        Edit <code className="bg-[#1a1a1a] px-2 py-1 rounded font-mono">src/App.tsx</code> and save to test HMR
-      </p>
-      <APITester />
-    </div>
+    <Provider store={store}>
+      <Tracker />
+    </Provider>
   );
 }
 

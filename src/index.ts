@@ -3,37 +3,30 @@ import index from "./index.html";
 
 const server = serve({
   routes: {
-    // Serve index.html for all unmatched routes.
     "/*": index,
 
-    "/api/hello": {
-      async GET(req) {
+    "/api/assignments": {
+      async GET() {
+        const iso = (offsetDays: number) => {
+          const d = new Date();
+          d.setDate(d.getDate() + offsetDays);
+          return d.toISOString().slice(0, 10);
+        };
         return Response.json({
-          message: "Hello, world!",
-          method: "GET",
+          data: [
+            { id: "seed-1", subject: "Toán cao cấp", title: "Bài tập chương 3: giới hạn và đạo hàm", dueDate: iso(2), priority: "high", completed: false },
+            { id: "seed-2", subject: "Vật lý đại cương", title: "Báo cáo thí nghiệm đo điện trở", dueDate: iso(-1), priority: "medium", completed: false },
+            { id: "seed-3", subject: "Cơ sở dữ liệu", title: "Thiết kế ERD quản lý thư viện", dueDate: iso(5), priority: "medium", completed: false },
+            { id: "seed-4", subject: "Tiếng Anh", title: "Viết essay 500 từ", dueDate: iso(-3), priority: "low", completed: true },
+            { id: "seed-5", subject: "Nhập môn lập trình", title: "Bài lab mảng và chuỗi", dueDate: iso(0), priority: "high", completed: false },
+          ],
         });
       },
-      async PUT(req) {
-        return Response.json({
-          message: "Hello, world!",
-          method: "PUT",
-        });
-      },
-    },
-
-    "/api/hello/:name": async req => {
-      const name = req.params.name;
-      return Response.json({
-        message: `Hello, ${name}!`,
-      });
     },
   },
 
   development: process.env.NODE_ENV !== "production" && {
-    // Enable browser hot reloading in development
     hmr: true,
-
-    // Echo console logs from the browser to the server
     console: true,
   },
 });

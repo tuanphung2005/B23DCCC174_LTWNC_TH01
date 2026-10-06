@@ -1,21 +1,20 @@
-# bun-react-tailwind-template
+# Student Deadline Tracker
 
-To install dependencies:
+Ứng dụng quản lý deadline bài tập cá nhân cho sinh viên: theo dõi bài tập sắp đến hạn, đánh dấu hoàn thành, lọc theo trạng thái.
+
+## Chạy
 
 ```bash
 bun install
+bun dev      # dev (hot reload)
+bun start    # production
 ```
 
-To start a development server:
+Mở URL server in ra console, danh sách mẫu được tải từ `GET /api/assignments`.
 
-```bash
-bun dev
-```
+## Công nghệ
 
-To run for production:
-
-```bash
-bun start
-```
-
-This project was created using `bun init` in bun v1.4.2. [Bun](https://bun.com) is a fast all-in-one JavaScript runtime.
+- React 19 + Tailwind CSS 4
+- Redux Toolkit + TypeScript (feature-based, typed hooks, `createAsyncThunk`)
+- TypeScript nâng cao: generic, utility types (`Pick`/`Partial`/`Readonly`), type guard
+- Design pattern: custom hook nâng cao (`useDeadlines`) + Compound Component (`AssignmentCard`) + HOC (`withLoading`)
